@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#009688"
+    tools:context=".SettingsActivity">
+
+    <Spinner
+        android:id="@+id/spinner_color2"
+        android:layout_width="150sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="75dp"
+        android:background="@color/white"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/color2"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_color1" />
+
+    <TextView
+        android:id="@+id/color2"
+        android:layout_width="200sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="75dp"
+        android:background="#FFFFFF"
+        android:text="Stack color: "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_color2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color1" />
+
+    <Spinner
+        android:id="@+id/spinner_color1"
+        android:layout_width="150sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="75dp"
+        android:background="@color/white"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/color1"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_round" />
+
+    <TextView
+        android:id="@+id/color1"
+        android:layout_width="200sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="75dp"
+        android:background="#FFFFFF"
+        android:text="Background color: "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_color1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rounding_txt" />
+
+    <Spinner
+        android:id="@+id/spinner_round"
+        android:layout_width="150sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="161dp"
+        android:background="@color/white"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/rounding_txt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rounding_txt"
+        android:layout_width="200sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="161dp"
+        android:background="#FFFFFF"
+        android:text="Rounding accuracy: "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_round"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cancel"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_color2" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/save"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
