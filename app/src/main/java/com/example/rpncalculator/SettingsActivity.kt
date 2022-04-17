@@ -3,24 +3,23 @@ package com.example.rpncalculator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
     class SettingsActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-        private var round_list = arrayOf ("3", "4", "5", "6", "7")
-        private var color_list = arrayOf ("white", "green", "blue")
-        private var spinner_r:Spinner? = null
-        private var spinner_c1:Spinner? = null
-        private var spinner_c2:Spinner? = null
+        private var roundList = arrayOf ("3", "4", "5", "6", "7")
+        private var colorList = arrayOf ("white", "green", "blue")
+        private var spinnerR:Spinner? = null
+        private var spinnerC1:Spinner? = null
+        private var spinnerC2:Spinner? = null
         private var round:Int? = null
         private var color1:String? = null
         private var color2:String? = null
-        private var round_previous:Int? = null
-        private var color1_previous:String? = null
-        private var color2_previous:String? = null
+        private var roundPrevious:Int? = null
+        private var color1Previous:String? = null
+        private var color2Previous:String? = null
 
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,34 +27,34 @@ import androidx.appcompat.app.AppCompatActivity
         setContentView(R.layout.settings_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-        round_previous = intent.getIntExtra("round", 3)
-        color1_previous = intent.getStringExtra("bg_color") ?: color1
-        color2_previous = intent.getStringExtra("stack_color") ?: color2
+        roundPrevious = intent.getIntExtra("round", 3)
+        color1Previous = intent.getStringExtra("bg_color") ?: color1
+        color2Previous = intent.getStringExtra("stack_color") ?: color2
 
 
-        val txt = findViewById<TextView>(R.id.rounding_txt)
-        txt.text = "Rounding accuracy: " + round_previous
+        //val txt = findViewById<TextView>(R.id.rounding_txt)
+        //txt.text = "Rounding accuracy: " + round_previous
 
-        spinner_r = findViewById(R.id.spinner_round)
-        spinner_r!!.setOnItemSelectedListener(this)
+        spinnerR = findViewById(R.id.spinner_round)
+        spinnerR!!.onItemSelectedListener = this
 
-        spinner_c1 = findViewById(R.id.spinner_color1)
-        spinner_c1!!.setOnItemSelectedListener(this)
+        spinnerC1 = findViewById(R.id.spinner_color1)
+        spinnerC1!!.onItemSelectedListener = this
 
-        spinner_c2 = findViewById(R.id.spinner_color2)
-        spinner_c2!!.setOnItemSelectedListener(this)
+        spinnerC2 = findViewById(R.id.spinner_color2)
+        spinnerC2!!.onItemSelectedListener = this
 
-        var array_adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, round_list)
-        array_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner_r!!.setAdapter(array_adapter)
+        var arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roundList)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerR!!.adapter = arrayAdapter
 
-        array_adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, color_list)
-        array_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner_c1!!.setAdapter(array_adapter)
+        arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colorList)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerC1!!.adapter = arrayAdapter
 
-        array_adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, color_list)
-        array_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner_c2!!.setAdapter(array_adapter)
+        arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colorList)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerC2!!.adapter = arrayAdapter
 
         val saveButton: Button = findViewById(R.id.save)
         saveButton.setOnClickListener{ finish() }
@@ -67,27 +66,24 @@ import androidx.appcompat.app.AppCompatActivity
     private fun cancel()
     {
         val data = Intent()
-        data.putExtra("round", round_previous )
-        data.putExtra("bg_color", color1_previous)
-        data.putExtra("stack_color", color2_previous)
+        data.putExtra("round", roundPrevious )
+        data.putExtra("bg_color", color1Previous)
+        data.putExtra("stack_color", color2Previous)
         setResult(Activity.RESULT_OK, data)
         super.finish()
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long)
     {
-        if (arg0.getId() == R.id.spinner_round)
-        {
-            round = Integer.parseInt(round_list[position])
-        }
-        if (arg0.getId() == R.id.spinner_color1)
-        {
-            color1 = color_list[position]
-        }
-        if (arg0.getId() == R.id.spinner_color2)
-        {
-            color2 = color_list[position]
-        }
+
+        if(arg0.id == R.id.spinner_round)
+            round = Integer.parseInt(roundList[position])
+        if(arg0.id == R.id.spinner_color1)
+            color1 = colorList[position]
+        if(arg0.id == R.id.spinner_color2)
+            color2 = colorList[position]
+
+
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
@@ -97,8 +93,8 @@ import androidx.appcompat.app.AppCompatActivity
     override fun finish() {
         val data = Intent()
         data.putExtra("round", round )
-        data.putExtra("bg_color", color1)
-        data.putExtra("stack_color", color2)
+        data.putExtra("bgColor", color1)
+        data.putExtra("stackColor", color2)
         setResult(Activity.RESULT_OK, data)
         super.finish()
     }
