@@ -46,41 +46,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun buttons()
     {
-        var b:Button = findViewById(R.id.button0)
-        b.setOnClickListener{enterNumber('0')}
+        findViewById<Button>(R.id.button0).setOnClickListener{enterNumber('0')}
 
-        b = findViewById(R.id.button1)
-        b.setOnClickListener{ enterNumber('1')}
+        findViewById<Button>(R.id.button1).setOnClickListener{ enterNumber('1')}
 
-        b = findViewById(R.id.button2)
-        b.setOnClickListener{ enterNumber('2')}
+        findViewById<Button>(R.id.button2).setOnClickListener{ enterNumber('2')}
 
-        b = findViewById(R.id.button3)
-        b.setOnClickListener{ enterNumber('3')}
+        findViewById<Button>(R.id.button3).setOnClickListener{ enterNumber('3')}
 
-        b = findViewById(R.id.button4)
-        b.setOnClickListener{ enterNumber('4')}
+        findViewById<Button>(R.id.button4).setOnClickListener{ enterNumber('4')}
 
-        b = findViewById(R.id.button5)
-        b.setOnClickListener{ enterNumber('5')}
+        findViewById<Button>(R.id.button5).setOnClickListener{ enterNumber('5')}
 
-        b = findViewById(R.id.button6)
-        b.setOnClickListener{ enterNumber('6')}
+        findViewById<Button>(R.id.button6).setOnClickListener{ enterNumber('6')}
 
-        b = findViewById(R.id.button7)
-        b.setOnClickListener{ enterNumber('7')}
+        findViewById<Button>(R.id.button7).setOnClickListener{ enterNumber('7')}
 
-        b = findViewById(R.id.button8)
-        b.setOnClickListener{ enterNumber('8')}
+        findViewById<Button>(R.id.button8).setOnClickListener{ enterNumber('8')}
 
-        b = findViewById(R.id.button9)
-        b.setOnClickListener{ enterNumber('9')}
+        findViewById<Button>(R.id.button9).setOnClickListener{ enterNumber('9')}
 
-        b = findViewById(R.id.button_dot)
-        b.setOnClickListener{ enterNumber('.')}
+        findViewById<Button>(R.id.button_dot).setOnClickListener{ enterNumber('.')}
 
-        b = findViewById(R.id.button_sign)
-        b.setOnClickListener{
+        findViewById<Button>(R.id.button_sign).setOnClickListener{
             sign = sign.not()
             if(sign)
             {
@@ -95,26 +83,64 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        b = findViewById(R.id.button_enter)
-        b.setOnClickListener {  enter() }
+        findViewById<Button>(R.id.button_enter).setOnClickListener {  enter() }
 
-        b = findViewById(R.id.button_plus)
-        b.setOnClickListener { operation('+') }
+        findViewById<Button>(R.id.button_plus).setOnClickListener { operation('+') }
 
-        b = findViewById(R.id.button_minus)
-        b.setOnClickListener { operation('-') }
+        findViewById<Button>(R.id.button_minus).setOnClickListener { operation('-') }
 
-        b = findViewById(R.id.button_mul)
-        b.setOnClickListener { operation('*') }
+        findViewById<Button>(R.id.button_mul).setOnClickListener { operation('*') }
 
-        b = findViewById(R.id.button_div)
-        b.setOnClickListener { operation('/') }
+        findViewById<Button>(R.id.button_div).setOnClickListener { operation('/') }
 
-        b = findViewById(R.id.button_pow)
-        b.setOnClickListener { operation('^') }
+        findViewById<Button>(R.id.button_pow).setOnClickListener { operation('^') }
 
-        b = findViewById(R.id.button_sqrt)
-        b.setOnClickListener { operation('s') }
+        findViewById<Button>(R.id.button_sqrt).setOnClickListener { operation('s') }
+
+        findViewById<Button>(R.id.button_swap).setOnClickListener {
+            if( stack.empty() || number == " " || number == "-")
+                return@setOnClickListener
+            val x = stack.pop()
+            stack.push(number)
+            text2.text = number
+            number = x
+            text1.text = number
+            sign = number.toDouble() < 0
+            dot = number.indexOf('.') != -1
+        }
+
+        findViewById<Button>(R.id.button_drop).setOnClickListener {
+            number = " "
+            dot = false
+            sign = false
+            text1.text = number
+        }
+
+        findViewById<Button>(R.id.button_AC).setOnClickListener {
+            text1.text = " "
+            text2.text = " "
+            text3.text = " "
+            text4.text = " "
+            number = " "
+            dot = false
+            sign = false
+            stack.clear()
+        }
+
+        findViewById<Button>(R.id.button_undo).setOnClickListener {
+
+        }
+
+        findViewById<Button>(R.id.button_bs).setOnClickListener {
+            if ( number.length > 1 )
+            {
+                val c = number[number.length-1]
+                number = number.substring(0, number.length-1)
+                text1.text = number
+                if(c == '.')
+                    dot = false
+            }
+        }
     }
 
     private fun enterNumber(c:Char)
@@ -162,7 +188,7 @@ class MainActivity : AppCompatActivity() {
     {
         if(stack.size < 1 || number == " " || number == "-" || c == 's')
         {
-            if (!sign && c == 's')
+            if ( c == 's' && !sign && number.length > 1)
             {
                 val y:Double = sqrt(number.toDouble())
                 number = roundResult(y)
