@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private var number:String = " "
     private var dot:Boolean = false
     private var sign: Boolean = false
+    private lateinit var stackCounter:TextView
+    private var state:Stack<StackState> = Stack()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         text2 = findViewById(R.id.textView2)
         text3 = findViewById(R.id.textView3)
         text4 = findViewById(R.id.textView4)
+        stackCounter = findViewById(R.id.counter)
 
         val switchToSettings: Button = findViewById(R.id.settings_button)
         switchToSettings.setOnClickListener{ showSettings() }
@@ -100,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_swap).setOnClickListener {
             if( stack.empty() || number == " " || number == "-")
                 return@setOnClickListener
+            saveState()
             val x = stack.pop()
             stack.push(number)
             text2.text = number
@@ -110,13 +114,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_drop).setOnClickListener {
-            number = " "
-            dot = false
-            sign = false
-            text1.text = number
+            drop()
         }
 
         findViewById<Button>(R.id.button_AC).setOnClickListener {
+            saveState()
             text1.text = " "
             text2.text = " "
             text3.text = " "
@@ -125,10 +127,11 @@ class MainActivity : AppCompatActivity() {
             dot = false
             sign = false
             stack.clear()
+            updateCounter()
         }
 
         findViewById<Button>(R.id.button_undo).setOnClickListener {
-
+            loadState()
         }
 
         findViewById<Button>(R.id.button_bs).setOnClickListener {
@@ -143,6 +146,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveState()
+    {
+        val currentState = StackState()
+        currentState.saveState(stack, dot, sign, text1.text as String, text2.text as String, text3.text as String, text4.text as String)
+        state.push(currentState)
+    }
+
+    private fun loadState()
+    {
+        if (state.empty())
+            return
+        val currentState = state.pop()
+        stack = currentState.stack
+        dot = currentState.dot
+        sign = currentState.sign
+        text1.text = currentState.text1
+        text2.text = currentState.text2
+        text3.text = currentState.text3
+        text4.text = currentState.text4
+        number = currentState.text1
+        updateCounter()
+    }
+
     private fun enterNumber(c:Char)
     {
         if(!(c == '.' && dot))
@@ -154,8 +180,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateCounter()
+    {
+        val c:String = "Stack: " + stack.size.toString()
+        stackCounter.text = c
+    }
+
     private fun enter()
     {
+        saveState()
         if(number == " " || number == "-")
         {
             if(!stack.empty())
@@ -176,6 +209,65 @@ class MainActivity : AppCompatActivity() {
             dot = false
             sign = false
         }
+        updateCounter()
+    }
+
+    private fun drop()
+    {
+        if(number.length > 1) {
+            saveState()
+            number = " "
+            dot = false
+            sign = false
+            text1.text = number
+        }
+        else
+        {
+            if (!stack.empty())
+            {
+                saveState()
+                number = stack.pop()
+                text1.text = number
+                sign = number[0] != '-'
+                dot = number.indexOf('.') != -1
+                moveStack()
+            }
+        }
+        updateCounter()
+    }
+
+    private fun moveStack()
+    {
+        if (!stack.empty())
+        {
+            val x1 = stack.pop()
+            text2.text = x1
+            if (!stack.empty())
+            {
+                val x2 = stack.pop()
+                text3.text = x2
+
+                if (!stack.empty())
+                {
+                    val x3 = stack.peek()
+                    text4.text = x3
+                }
+                else
+                {
+                    text4.text = " "
+                }
+                stack.push(x2)
+            }
+            else
+            {
+                text3.text = " "
+            }
+            stack.push(x1)
+        }
+        else
+        {
+            text2.text = " "
+        }
     }
 
     private fun roundResult(y:Double): String {
@@ -190,12 +282,15 @@ class MainActivity : AppCompatActivity() {
         {
             if ( c == 's' && !sign && number.length > 1)
             {
+                saveState()
                 val y:Double = sqrt(number.toDouble())
                 number = roundResult(y)
                 text1.text = number
             }
+            updateCounter()
             return
         }
+        saveState()
         val x2 =  stack.pop().toDouble()
         val x1 = number.toDouble()
         var y = 0.0
@@ -214,47 +309,20 @@ class MainActivity : AppCompatActivity() {
             else
             {
                 stack.push(x2.toString())
+                updateCounter()
                 return
             }
         }
         if(c == '^')
             y = x2.pow(x1)
-        if (!stack.empty())
-        {
-            val x3 = stack.pop()
-            text2.text = x3
-            if (!stack.empty())
-            {
-                val x4 = stack.pop()
-                text3.text = x4
-
-                if (!stack.empty())
-                {
-                    val x5 = stack.peek()
-                    text4.text = x5
-                }
-                else
-                {
-                    text4.text = " "
-                }
-                stack.push(x4)
-            }
-            else
-            {
-                text3.text = " "
-            }
-            stack.push(x3)
-        }
-        else
-        {
-            text2.text = " "
-        }
+        moveStack()
         number = roundResult(y)
         if(y > 0)
             number = " $number"
         text1.text = number
         dot = true
         sign = y < 0
+        updateCounter()
     }
 
     private fun showSettings()
